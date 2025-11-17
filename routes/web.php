@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Livewire\Proyectos;
+use App\Livewire\Proyectos\CrearProyecto;
+use App\Livewire\Proyectos\EditarProyecto;
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Route;
+
+
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
@@ -19,6 +25,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Route::get('/proyectos', Proyectos::class)->name('proyectos.index');
+    // Route::get('/proyectos/crear', CrearProyecto::class)->name('proyectos.crear');
+    // Route::get('/proyectos/{id}/editar', EditarProyecto::class)->name('proyectos.editar');
+
+    Route::get('/proyectos', function () {
+        return view('proyectos.index');
+    })->name('proyectos.index');
+
+    Route::get('/proyectos/crear', function () {
+        return view('proyectos.crear');
+    })->name('proyectos.crear');
+
+    Route::get('/proyectos/{proyecto}/editar', function (Proyecto $proyecto) {
+        return view('proyectos.editar', compact('proyecto'));
+    })->name('proyectos.editar');
+
 });
 
 // Redirigir raíz según autenticación
