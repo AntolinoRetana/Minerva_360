@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DonanteController;
+use App\Http\Controllers\DonacionController;
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
@@ -24,4 +26,17 @@ Route::middleware('auth')->group(function () {
 // Redirigir raíz según autenticación
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
+});
+// Rutas protegidas
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Rutas de Donantes
+    Route::resource('donantes', DonanteController::class);
+
+    // Rutas de Donaciones
+    Route::resource('donaciones', DonacionController::class);
 });
