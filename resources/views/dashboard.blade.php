@@ -46,5 +46,16 @@
             </div>
         </div>
     </div>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <a href="{{ route('donantes.index') }}" class="block p-6 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100">
+        <h3 class="text-lg font-semibold text-indigo-900">Gestión de Donantes</h3>
+        <p class="text-indigo-700 mt-2">Ver, crear y editar donantes</p>
+    </a>
+
+    <a href="{{ route('donaciones.index') }}" class="block p-6 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100">
+        <h3 class="text-lg font-semibold text-green-900">Gestión de Donaciones</h3>
+        <p class="text-green-700 mt-2">Registrar y administrar donaciones</p>
+    </a>
+</div>
 </body>
 </html>
