@@ -9,6 +9,7 @@ use App\Models\Proyecto;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonanteController;
 use App\Http\Controllers\DonacionController;
+use App\Http\Controllers\ImagenesProyectoController;
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
@@ -48,6 +49,9 @@ Route::middleware('auth')->group(function () {
 
     // Rutas de Usuarios (CRUD completo)
     Route::resource('users', UserController::class);
+
+    //crud completo de imagenes proyectos
+    Route::resource('imagenes-proyectos', ImagenesProyectoController::class);
 });
 
 // Redirigir raíz según autenticación
