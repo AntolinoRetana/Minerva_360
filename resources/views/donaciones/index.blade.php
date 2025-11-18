@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Donaciones</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-bold text-gray-800">Sistema de Donaciones</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
-                    <a href="{{ route('donantes.index') }}" class="text-gray-700 hover:text-gray-900">Donantes</a>
-                    <a href="{{ route('donaciones.index') }}" class="text-indigo-600 font-semibold">Donaciones</a>
-                    <span class="text-gray-700">{{ auth()->user()->name }}</span>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">
-                            Cerrar sesión
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.app')
+
+@php($title = 'Donaciones')
+
+@section('content')
 
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         @if(session('success'))
@@ -107,5 +82,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection
