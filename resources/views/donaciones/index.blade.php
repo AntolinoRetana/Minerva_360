@@ -4,72 +4,96 @@
 
 @section('content')
 
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        @if(session('success'))
-            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                {{ session('success') }}
-            </div>
-        @endif
+    <!-- Cabecera de la Página -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold h2-institucional mb-0">Lista de Donaciones</h1>
+        <div>
+            <!-- Botón "Crear" con el color Rojo Minerva -->
+            <a href="{{ route('donaciones.create') }}" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Nueva Donación</span>
+            </a>
+        </div>
+    </div>
 
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">Lista de Donaciones</h2>
-                <a href="{{ route('donaciones.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium">
-                    + Nueva Donación
-                </a>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+    <!-- Contenedor para la tabla -->
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Donante</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Proyecto</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monto</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Método</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Donante</th>
+                            <th scope="col">Proyecto</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Método</th>
+                            <th scope="col" class="text-end">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody>
                         @forelse($donaciones as $donacion)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $donacion->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td>{{ $donacion->id }}</td>
+                                <td class="fw-medium">
                                     {{ $donacion->donante->nombre }} {{ $donacion->donante->apellido }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $donacion->proyecto->nombre }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                                <td>{{ $donacion->proyecto->nombre }}</td>
+                                <td class="fw-bold text-success">
                                     ${{ number_format($donacion->monto, 2) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td>
                                     {{ \Carbon\Carbon::parse($donacion->fecha)->format('d/m/Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        {{ $donacion->metodo_pago == 'Efectivo' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $donacion->metodo_pago == 'Transferencia' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $donacion->metodo_pago == 'Paypal' ? 'bg-purple-100 text-purple-800' : '' }}">
+                                <td>
+                                    <!-- Badges de Bootstrap Light -->
+                                    <span class="badge rounded-pill
+                                        {{ $donacion->metodo_pago == 'Efectivo' ? 'bg-success-light text-success' : '' }}
+                                        {{ $donacion->metodo_pago == 'Transferencia' ? 'bg-primary-light text-primary' : '' }}
+                                        {{ $donacion->metodo_pago == 'Paypal' ? 'bg-info-light text-info' : '' }}
+                                        {{ !in_array($donacion->metodo_pago, ['Efectivo', 'Transferencia', 'Paypal']) ? 'bg-secondary-light text-secondary' : '' }}">
                                         {{ $donacion->metodo_pago }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <a href="{{ route('donaciones.show', $donacion) }}" class="text-blue-600 hover:text-blue-900">Ver</a>
-                                    <a href="{{ route('donaciones.edit', $donacion) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
-                                    <form action="{{ route('donaciones.destroy', $donacion) }}" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar esta donación?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Eliminar</button>
-                                    </form>
+                                
+                                <!-- Acciones con botones de Bootstrap -->
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="{{ route('donaciones.show', $donacion) }}" 
+                                           class="btn btn-sm btn-outline-info" 
+                                           title="Ver">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="{{ route('donaciones.edit', $donacion) }}" 
+                                           class="btn btn-sm btn-outline-secondary" 
+                                           title="Editar">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        
+                                        <!-- Formulario de eliminación oculto -->
+                                        <form action="{{ route('donaciones.destroy', $donacion) }}" method="POST" 
+                                              id="delete-form-{{ $donacion->id }}" class="d-none">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+
+                                        <!-- Botón que activa SweetAlert -->
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            title="Eliminar"
+                                            onclick="confirmarEliminacion({{ $donacion->id }})">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                    No hay donaciones registradas
+                                <td colspan="7" class="text-center text-muted p-4">
+                                    No hay donaciones registradas.
                                 </td>
                             </tr>
                         @endforelse
@@ -77,9 +101,42 @@
                 </table>
             </div>
 
-            <div class="px-6 py-4 border-t border-gray-200">
+        </div>
+
+        <!-- Paginación -->
+        @if ($donaciones->hasPages())
+            <div class="card-footer bg-white border-0">
                 {{ $donaciones->links() }}
             </div>
-        </div>
+        @endif
+
     </div>
+
 @endsection
+
+@push('scripts')
+    <!-- Script de Confirmación de Eliminación (con colores de marca) -->
+    <script>
+        function confirmarEliminacion(id) {
+            // Obtenemos los colores de la paleta desde el CSS
+            const style = getComputedStyle(document.body);
+            const rojoMinerva = style.getPropertyValue('--rojo-minerva').trim();
+            
+            Swal.fire({
+                title: "¿Eliminar esta donación?",
+                text: "Esta acción no se puede deshacer",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: rojoMinerva,
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si confirma, envía el formulario de eliminación oculto
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
+@endpush

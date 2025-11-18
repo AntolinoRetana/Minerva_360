@@ -3,76 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Iniciar Sesión - Minerva 360</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+
 </head>
-<body class="bg-gray-100">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-            <div>
-                <h2 class="text-center text-3xl font-extrabold text-gray-900">
-                    Iniciar sesión
-                </h2>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    ¿No tienes cuenta?
-                    <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        Regístrate aquí
-                    </a>
-                </p>
+<body>
+
+    <div class="container">
+        <div class="row min-vh-100 d-flex align-items-center justify-content-center">
+            <!-- Columna contenedora para limitar el ancho de la "card" -->
+            <div class="col-12 col-lg-10 col-xl-9">
+
+                <!-- La "Card" principal que contiene las dos columnas -->
+                <div class="card shadow-lg border-0 login-card-container">
+                    <div class="row g-0">
+
+                        <!-- Columna Izquierda (Panel Institucional) -->
+                        <div class="col-md-6 col-lg-7 d-none d-md-flex login-panel-institucional">
+                            <div class="p-5">
+                                <img src="{{ asset('img/Logo.png') }}" height="150px" width="150px" alt="Logo Minerva" class="mb-4">
+                                <h1 class="h2 text-white fw-bold mb-3">
+                                    Bienvenido a Minerva 360
+                                </h1>
+                                <p class="text-white-75">
+                                    Tu plataforma de gestión académica todo en uno. Administra, enseña y aprende de forma eficiente.
+                                </p>
+                                <div class="copyright-text-wrapper">
+                                    © {{ date('Y') }} Minerva 360. Todos los derechos reservados.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna Derecha -->
+                        <div class="col-md-6 col-lg-5 login-panel-form">
+                            <!-- Wrapper interno para centrar y limitar el ancho del formulario -->
+                            <div class="login-form-inner">
+
+                                <!-- Logo para vista móvil -->
+                                <div class="text-center d-md-none mb-4">
+                                    <img src="{{ asset('img/Logo.png') }}" height="100px" width="100px" alt="Logo Minerva">
+                                </div>
+
+                                <div class="text-center text-md-start">
+                                    <h2 class="h3 fw-bold h2-institucional mb-2">
+                                        Iniciar sesión
+                                    </h2>
+                                </div>
+
+                                @if(session('success'))
+                                    <div class="alert alert-success mt-4">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+
+                                <!-- Formulario -->
+                                <form action="{{ route('login') }}" method="POST" class="mt-4">
+                                    @csrf
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label label-t">
+                                            Correo electrónico
+                                        </label>
+                                        <input id="email" name="email" type="email" required
+                                               value="{{ old('email') }}"
+                                               class="form-control @error('email') is-invalid @enderror">
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label label-t">
+                                            Contraseña
+                                        </label>
+                                        <input id="password" name="password" type="password" required
+                                               class="form-control @error('password') is-invalid @enderror">
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="form-check">
+                                            <input id="remember" name="remember" type="checkbox" class="form-check-input">
+                                            <label for="remember" class="form-check-label label-t">
+                                                Recordarme
+                                            </label>
+                                        </div>
+                                        <a href="#" class="fw-medium link-accion small">¿Olvidaste tu contraseña?</a>
+                                    </div>
+
+                                    <!-- Botón de Enviar (Estilo de marca) -->
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary w-100 py-2 fs-6 fw-medium">
+                                            Iniciar sesión
+                                        </button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
-                @csrf
-
-                <div class="space-y-4">
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">
-                            Correo electrónico
-                        </label>
-                        <input id="email" name="email" type="email" required
-                               value="{{ old('email') }}"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @error('email') border-red-500 @enderror">
-                        @error('email')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">
-                            Contraseña
-                        </label>
-                        <input id="password" name="password" type="password" required
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @error('password') border-red-500 @enderror">
-                        @error('password')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember" name="remember" type="checkbox"
-                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-900">
-                            Recordarme
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <button type="submit"
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Iniciar sesión
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

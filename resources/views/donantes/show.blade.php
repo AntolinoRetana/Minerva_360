@@ -4,99 +4,118 @@
 
 @section('content')
 
-    <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">Información del Donante</h2>
-                <div class="space-x-2">
-                    <a href="{{ route('donantes.edit', $donante) }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium">
-                        Editar
-                    </a>
-                    <a href="{{ route('donantes.index') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium">
-                        Volver
-                    </a>
-                </div>
+    <!-- Cabecera de la Página -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold h2-institucional mb-0">Información del Donante</h1>
+        <div class="d-flex gap-2">
+            <!-- Botón "Editar" con estilo secundario -->
+            <a href="{{ route('donantes.edit', $donante) }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill"></i>
+                <span>Editar</span>
+            </a>
+            <!-- Botón "Volver" -->
+            <a href="{{ route('donantes.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-left"></i>
+                <span>Volver</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Fila de Estadísticas Principales -->
+    <div class="row g-4 mb-4">
+        <!-- Widget 1: Total Donado -->
+        <div class="col-md-6">
+            <div class="card stat-card-simple border-start-rojo">
+                <p class="text-muted mb-1">Total Donado</p>
+                <h2 class="fw-bold text-rojo mb-0">
+                    ${{ number_format($totalDonado, 2) }}
+                </h2>
             </div>
+        </div>
+        <!-- Widget 2: Total de Donaciones -->
+        <div class="col-md-6">
+            <div class="card stat-card-simple border-start-azul">
+                <p class="text-muted mb-1">Total de Donaciones</p>
+                <h2 class="fw-bold text-azul mb-0">
+                    {{ $donante->donaciones->count() }}
+                </h2>
+            </div>
+        </div>
+    </div>
 
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-sm font-medium text-gray-500">Nombre Completo</p>
-                        <p class="mt-1 text-lg font-semibold text-gray-900">{{ $donante->nombre }} {{ $donante->apellido }}</p>
-                    </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-sm font-medium text-gray-500">Correo Electrónico</p>
-                        <p class="mt-1 text-lg text-gray-900">{{ $donante->correo }}</p>
-                    </div>
-
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-sm font-medium text-gray-500">Teléfono</p>
-                        <p class="mt-1 text-lg text-gray-900">{{ $donante->telefono ?? 'No registrado' }}</p>
-                    </div>
-
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-sm font-medium text-gray-500">Usuario</p>
-                        <p class="mt-1 text-lg text-gray-900">{{ $donante->usuario }}</p>
-                    </div>
-
-                    <div class="bg-green-50 p-4 rounded-lg border-2 border-green-200">
-                        <p class="text-sm font-medium text-green-700">Total Donado</p>
-                        <p class="mt-1 text-2xl font-bold text-green-600">${{ number_format($totalDonado, 2) }}</p>
-                    </div>
-
-                    <div class="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
-                        <p class="text-sm font-medium text-blue-700">Total de Donaciones</p>
-                        <p class="mt-1 text-2xl font-bold text-blue-600">{{ $donante->donaciones->count() }}</p>
-                    </div>
+    <!-- Tarjeta de Detalles del Donante -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body p-4 p-md-5">
+            <h5 class="card-title fw-bold mb-4">Detalles del Donante</h5>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Nombre Completo</p>
+                    <h6 class="fw-bold">{{ $donante->nombre }} {{ $donante->apellido }}</h6>
                 </div>
-
-                <div class="mt-6 bg-gray-50 p-4 rounded-lg">
-                    <p class="text-sm font-medium text-gray-500">Fecha de Registro</p>
-                    <p class="mt-1 text-lg text-gray-900">{{ $donante->created_at->format('d/m/Y H:i') }}</p>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Correo Electrónico</p>
+                    <h6 class="fw-medium">{{ $donante->correo }}</h6>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Teléfono</p>
+                    <h6 class="fw-medium">{{ $donante->telefono ?? 'No registrado' }}</h6>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Usuario</p>
+                    <h6 class="fw-medium">{{ $donante->usuario }}</h6>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Fecha de Registro</p>
+                    <h6 class="fw-medium">{{ $donante->created_at->format('d/m/Y H:i') }}</h6>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Historial de Donaciones -->
-        <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800">Historial de Donaciones</h3>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+    <!-- Tarjeta de Historial de Donaciones -->
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-white border-0 p-4">
+            <h5 class="fw-bold h2-institucional mb-0">Historial de Donaciones</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Proyecto</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Monto</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Método</th>
+                            <th scope="col" class="px-4 py-3">Fecha</th>
+                            <th scope="col" class="px-4 py-3">Proyecto</th>
+                            <th scope="col" class="px-4 py-3">Monto</th>
+                            <th scope="col" class="px-4 py-3">Método</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody>
                         @forelse($donante->donaciones as $donacion)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td class="px-4 py-3">
                                     {{ \Carbon\Carbon::parse($donacion->fecha)->format('d/m/Y') }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $donacion->proyecto->nombre }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                                <td class="px-4 py-3">
+                                    {{ $donacion->proyecto->nombre }}
+                                </td>
+                                <td class="px-4 py-3 fw-bold text-success">
                                     ${{ number_format($donacion->monto, 2) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        {{ $donacion->metodo_pago == 'Efectivo' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $donacion->metodo_pago == 'Transferencia' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $donacion->metodo_pago == 'Paypal' ? 'bg-purple-100 text-purple-800' : '' }}">
+                                <td class="px-4 py-3">
+                                    <!-- Badges de Bootstrap Light -->
+                                    <span class="badge rounded-pill
+                                        {{ $donacion->metodo_pago == 'Efectivo' ? 'bg-success-light text-success' : '' }}
+                                        {{ $donacion->metodo_pago == 'Transferencia' ? 'bg-primary-light text-primary' : '' }}
+                                        {{ $donacion->metodo_pago == 'Paypal' ? 'bg-info-light text-info' : '' }}
+                                        {{ !in_array($donacion->metodo_pago, ['Efectivo', 'Transferencia', 'Paypal']) ? 'bg-secondary-light text-secondary' : '' }}">
                                         {{ $donacion->metodo_pago }}
                                     </span>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                                    Este donante aún no ha realizado donaciones
+                                <td colspan="4" class="text-center text-muted p-4">
+                                    Este donante aún no ha realizado donaciones.
                                 </td>
                             </tr>
                         @endforelse
@@ -105,5 +124,5 @@
             </div>
         </div>
     </div>
-@endsection
 
+@endsection

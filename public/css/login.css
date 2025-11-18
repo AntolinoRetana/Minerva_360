@@ -1,0 +1,117 @@
+:root {
+    --rojo-minerva: #bd2d27;
+    --rojo-sangre: #9e0012;
+    --azul-oxford: #1B263B;
+    --gris-carbon: #333333;
+    --gris-platino: #F0F2F5;
+    --blanco-puro: #FFFFFF;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    background-color: var(--blanco-puro) !important; /* Fondo de Página */
+    color: var(--gris-carbons);
+    font-family: 'Poppins', sans-serif;
+}
+
+/*Diseño de Card */
+
+/* El contenedor de la tarjeta principal */
+.login-card-container {
+    border-radius: 1rem !important; 
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Panel Izquierdo (Institucional) */
+.login-panel-institucional {
+    background-color: var(--rojo-sangre);
+    color: var(--blanco-puro);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative; 
+    min-height: 600px; 
+    text-align: center;
+}
+
+.login-panel-institucional .copyright-text-wrapper {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.8rem;
+}
+
+/* Panel Derecho (Formulario) */
+.login-panel-form {
+    background-color: var(--gris-platino);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow-y: auto; 
+    min-height: 600px;
+}
+.login-form-inner {
+    width: 100%;
+    max-width: 450px; 
+}
+
+/* Títulos (Institucional) */
+.h2-institucional {
+    color: var(--azul-oxford) !important;
+}
+
+.label-t {
+    color: var(--azul-oxford);
+    font-weight: 500;
+}
+
+/* Botón Principal (Acción) */
+.btn-primary {
+    background-color: var(--rojo-minerva);
+    border-color: var(--rojo-minerva);
+    --bs-btn-hover-bg: var(--rojo-sangre);
+    --bs-btn-hover-border-color: var(--rojo-sangre);
+    --bs-btn-active-bg: var(--rojo-sangre);
+    --bs-btn-active-border-color: var(--rojo-sangre);
+    --bs-btn-focus-shadow-rgb: 219, 83, 78;
+}
+.btn-primary:hover {
+    background-color: var(--rojo-sangre) !important;
+    border-color: var(--rojo-sangre) !important;
+}
+        
+/* Enlaces (Acción) */
+.link-accion {
+    color: var(--azul-oxford) !important;
+    text-decoration: none;
+}
+.link-accion:hover {
+    color: var(--azul-oxford) !important;
+    text-decoration: underline;
+}
+
+/* Controles de Formulario (Institucional y Acción) */
+.form-control:focus {
+    border-color: var(--azul-oxford) !important;
+    box-shadow: 0 0 0 0.25rem rgba(27, 38, 59, 0.25) !important; 
+}
+
+.form-check-input:checked {
+    background-color: var(--azul-oxford) !important;
+    border-color: var(--rojo-minerva) !important;
+}
+
+.form-check-input:focus {
+    border-color: var(--azul-oxford) !important;
+    box-shadow: 0 0 0 0.25rem rgba(27, 38, 59, 0.25) !important;
+}

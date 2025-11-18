@@ -10,31 +10,6 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-    // Mostrar formulario de registro
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
-
-    // Procesar registro
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(8)],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::login($user);
-
-        return redirect()->route('dashboard')->with('success', '¡Cuenta creada exitosamente!');
-    }
 
     // Mostrar formulario de login
     public function showLogin()
