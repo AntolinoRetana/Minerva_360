@@ -61,5 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('donantes', DonanteController::class);
 
     // Rutas de Donaciones
-    Route::resource('donaciones', DonacionController::class);
+    Route::resource('donaciones', DonacionController::class)->parameters([
+    'donaciones' => 'donacion'
+    ]);
 });
