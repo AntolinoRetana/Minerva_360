@@ -13,12 +13,7 @@
                 <h2 class="text-center text-3xl font-extrabold text-gray-900">
                     Iniciar sesión
                 </h2>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    ¿No tienes cuenta?
-                    <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        Regístrate aquí
-                    </a>
-                </p>
+
             </div>
 
             @if(session('success'))
