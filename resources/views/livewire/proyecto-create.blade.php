@@ -1,48 +1,78 @@
-<div class="max-w-xl mx-auto bg-white p-6 shadow rounded">
+<div>
     <form wire:submit.prevent="guardar">
-
-        <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">Nombre</label>
-            <input type="text" wire:model="nombre"
-                   class="w-full border p-2 rounded">
-            @error('nombre') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+        
+        <!-- Fila 1: Nombre (Ancho Completo) -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="nombre" class="form-label label-t">Nombre del Proyecto</label>
+                <input type="text" id="nombre" wire:model="nombre"
+                       class="form-control @error('nombre') is-invalid @enderror">
+                @error('nombre') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">Descripción</label>
-            <textarea wire:model="descripcion"
-                      class="w-full border p-2 rounded"></textarea>
+        <!-- Fila 2: Descripción (Ancho Completo) -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="descripcion" class="form-label label-t">Descripción</label>
+                <textarea id="descripcion" wire:model="descripcion" rows="4"
+                          class="form-control @error('descripcion') is-invalid @enderror"></textarea>
+                @error('descripcion') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">Carrera</label>
-            <input type="text" wire:model="carrera"
-                   class="w-full border p-2 rounded">
+        <!-- Fila 3: Carrera y Ubicación (Dos Columnas) -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="carrera" class="form-label label-t">Carrera</label>
+                <input type="text" id="carrera" wire:model="carrera"
+                       class="form-control @error('carrera') is-invalid @enderror">
+                @error('carrera') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+            </div>
+            <div class="col-md-6 mt-3 mt-md-0">
+                <label for="ubicacion" class="form-label label-t">Ubicación</label>
+                <input type="text" id="ubicacion" wire:model="ubicacion"
+                       class="form-control @error('ubicacion') is-invalid @enderror">
+                @error('ubicacion') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">Ubicación</label>
-            <input type="text" wire:model="ubicacion"
-                   class="w-full border p-2 rounded">
+        <!-- Fila 4: Meta (Media Columna) -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="meta" class="form-label label-t">Meta ($)</label>
+                <input type="number" id="meta" wire:model="meta" step="0.01"
+                       class="form-control @error('meta') is-invalid @enderror">
+                @error('meta') 
+                    <div class="invalid-feedback">{{ $message }}</div> 
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Meta ($)</label>
-            <input type="number" wire:model="meta"
-                   class="w-full border p-2 rounded">
-            @error('meta') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <div class="flex justify-end space-x-2">
+        <!-- Fila 5: Botones -->
+        <hr>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            
+            <!-- Botón Cancelar (Enlace) -->
             <a href="{{ route('proyectos.index') }}"
-               class="px-4 py-2 border rounded">
+               class="btn btn-outline-secondary">
                Cancelar
             </a>
 
+            <!-- Botón Guardar (con el color Rojo Minerva) -->
             <button type="submit"
-                    class="px-4 py-2 bg-green-600 text-white rounded">
-                Guardar
+                    class="btn btn-primary">
+                Guardar Proyecto
             </button>
+            
         </div>
 
     </form>
