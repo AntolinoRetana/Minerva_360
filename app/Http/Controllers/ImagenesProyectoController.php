@@ -19,86 +19,68 @@ class ImagenesProyectoController extends Controller
         $this->storage = $storage;
     }
 
-    public function index(Request $request): View
-    {
-        $imagenesProyectos = ImagenProyecto::paginate();
-
-        return view('imagenes-proyecto.index', compact('imagenesProyectos'))
-            ->with('i', ($request->input('page', 1) - 1) * $imagenesProyectos->perPage());
-    }
-
     public function create(Request $request): View
     {
         $imagenesProyecto = new ImagenProyecto();
         $imagenesProyecto->proyecto_id = $request->proyecto_id;
 
-        $proyecto = \App\Models\Proyecto::find($request->proyecto_id);
+        $proyecto = \App\Models\Proyecto::findOrFail($request->proyecto_id);
 
         return view('imagenes-proyecto.create', compact('imagenesProyecto', 'proyecto'));
     }
 
     public function store(ImagenesProyectoRequest $request): RedirectResponse
     {
-        // 1) Calcular orden incremental
+        // Calcular orden incremental
         $ultimo = ImagenProyecto::where('proyecto_id', $request->proyecto_id)
-                    ->orderBy('orden', 'desc')
-                    ->first();
+            ->orderBy('orden', 'desc')
+            ->first();
 
         $nuevoOrden = $ultimo ? $ultimo->orden + 1 : 1;
 
-        // 2) Archivo
+        // Archivo
         $file = $request->file('imagen');
 
-        // 3) Nombre único
+        // Nombre único
         $fileName = time() . '_' . $file->getClientOriginalName();
 
-        // 4) Carpeta por proyecto en Supabase
+        // Carpeta en supabase
         $path = "proyectos/{$request->proyecto_id}/{$fileName}";
 
-        // 5) Subir al bucket
+        // Subir
         $urlPublica = $this->storage->upload($file, $path);
 
-        // 6) Guardar en DB
+        // Insert DB
         ImagenProyecto::create([
             'proyecto_id' => $request->proyecto_id,
-            'url' => $urlPublica,
-            'orden' => $nuevoOrden,
+            'url'        => $urlPublica,
+            'orden'      => $nuevoOrden,
         ]);
 
-        return Redirect::route('imagenes-proyecto.index')
-            ->with('success', 'Imagen creada correctamente.');
+        return back()->with('success', 'Imagen subida correctamente.');
     }
 
-    public function show($id): View
+    public function porProyecto($proyecto_id): View
     {
-        $imagenesProyecto = ImagenProyecto::find($id);
+        $proyecto = \App\Models\Proyecto::findOrFail($proyecto_id);
 
-        return view('imagenes-proyecto.show', compact('imagenesProyecto'));
+        $imagenes = ImagenProyecto::where('proyecto_id', $proyecto_id)
+            ->orderBy('orden', 'asc')
+            ->get();
+
+        return view('imagenes-proyecto.por-proyecto', compact('proyecto', 'imagenes'));
     }
 
-    public function edit($id): View
+    public function eliminarImagen($id): RedirectResponse
     {
-        $imagenesProyecto = ImagenProyecto::find($id);
+        $imagen = ImagenProyecto::find($id);
 
-        return view('imagenes-proyecto.edit', compact('imagenesProyecto'));
-    }
+        if (!$imagen) {
+            return back()->with('error', 'La imagen no existe.');
+        }
 
-    public function update(ImagenesProyectoRequest $request, ImagenProyecto $imagenesProyecto): RedirectResponse
-    {
-        $imagenesProyecto->update([
-            'proyecto_id' => $request->proyecto_id,
-            'orden' => $request->orden,
-        ]);
+        $imagen->delete();
 
-        return Redirect::route('imagenes-proyecto.index')
-            ->with('success', 'Imagen actualizada correctamente.');
-    }
-
-    public function destroy($id): RedirectResponse
-    {
-        ImagenProyecto::find($id)->delete();
-
-        return Redirect::route('imagenes-proyecto.index')
-            ->with('success', 'Imagen eliminada correctamente.');
+        return back()->with('success', 'Imagen eliminada correctamente.');
     }
 }

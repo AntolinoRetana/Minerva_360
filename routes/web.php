@@ -13,7 +13,6 @@ use App\Http\Controllers\ImagenesProyectoController;
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
@@ -50,8 +49,25 @@ Route::middleware('auth')->group(function () {
     // Rutas de Usuarios (CRUD completo)
     Route::resource('users', UserController::class);
 
-    //crud completo de imagenes proyectos
-    Route::resource('imagenes-proyecto', App\Http\Controllers\ImagenesProyectoController::class);
+       // Ver galería
+    Route::get('/proyectos/{id}/imagenes', 
+        [ImagenesProyectoController::class, 'porProyecto']
+    )->name('imagenes-proyecto.por-proyecto');
+
+    // Subir imagen
+    Route::get('/imagenes-proyecto/create',
+        [ImagenesProyectoController::class, 'create']
+    )->name('imagenes-proyecto.create');
+
+    Route::post('/imagenes-proyecto/store',
+        [ImagenesProyectoController::class, 'store']
+    )->name('imagenes-proyecto.store');
+
+    // Eliminar imagen
+    Route::delete('/imagenes-proyecto/{id}/eliminar',
+        [ImagenesProyectoController::class, 'eliminarImagen']
+    )->name('imagenes-proyecto.eliminar');
+
 });
 
 // Redirigir raíz según autenticación

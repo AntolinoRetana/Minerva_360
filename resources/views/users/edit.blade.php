@@ -1,98 +1,120 @@
 @extends('layouts.app')
+@php($title = 'Editar Usuario')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Editar Usuario</h2>
-            <p class="text-gray-600 mt-2">Actualice la información del usuario</p>
-        </div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4 p-md-5">
 
-        <form action="{{ route('users.update', $user) }}" method="POST" class="space-y-6">
-            @csrf
-            @method('PUT')
-
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">
-                    Nombre completo *
-                </label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    value="{{ old('name', $user->name) }}"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @error('name') border-red-500 @enderror">
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">
-                    Correo electrónico *
-                </label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value="{{ old('email', $user->email) }}"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @error('email') border-red-500 @enderror">
-                @error('email')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="border-t pt-4">
-                <p class="text-sm font-medium text-gray-700 mb-4">
-                    Cambiar contraseña (opcional)
-                </p>
-                <p class="text-xs text-gray-500 mb-4">
-                    Deje estos campos en blanco si no desea cambiar la contraseña
-                </p>
-
-                <div class="space-y-4">
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">
-                            Nueva contraseña
-                        </label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @error('password') border-red-500 @enderror">
-                        <p class="mt-1 text-xs text-gray-500">Mínimo 8 caracteres</p>
-                        @error('password')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                    <!-- Encabezado -->
+                    <div class="mb-4">
+                        <h2 class="fw-bold h2-institucional mb-2">Editar Usuario</h2>
+                        <p class="text-muted">Actualice la información del usuario</p>
                     </div>
 
-                    <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
-                            Confirmar nueva contraseña
-                        </label>
-                        <input
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            type="password"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
+                    <!-- Formulario -->
+                    <form action="{{ route('users.update', $user) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label label-t fw-semibold">
+                                Nombre completo <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                required
+                                value="{{ old('name', $user->name) }}"
+                                class="form-control @error('name') is-invalid @enderror"
+                                placeholder="Ingrese el nombre completo">
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label for="email" class="form-label label-t fw-semibold">
+                                Correo electrónico <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                required
+                                value="{{ old('email', $user->email) }}"
+                                class="form-control @error('email') is-invalid @enderror"
+                                placeholder="correo@ejemplo.com">
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Separador -->
+                        <hr class="my-4">
+
+                        <!-- Sección de Cambio de Contraseña -->
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3">
+                                <i class="bi bi-key me-2"></i>Cambiar contraseña (opcional)
+                            </h5>
+                            <div class="alert alert-info d-flex align-items-center" role="alert">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <small>Deje estos campos en blanco si no desea cambiar la contraseña</small>
+                            </div>
+
+                            <!-- Nueva Contraseña -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label label-t fw-semibold">
+                                    Nueva contraseña
+                                </label>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    placeholder="Mínimo 8 caracteres">
+                                <small class="form-text text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>Mínimo 8 caracteres
+                                </small>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Confirmar Nueva Contraseña -->
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label label-t fw-semibold">
+                                    Confirmar nueva contraseña
+                                </label>
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    class="form-control"
+                                    placeholder="Repita la nueva contraseña">
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-2"></i>Actualizar Usuario
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
-
-            <div class="flex items-center justify-between pt-4">
-                <a href="{{ route('users.index') }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium">
-                    ← Cancelar
-                </a>
-                <button
-                    type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-medium">
-                    💾 Actualizar Usuario
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 @endsection

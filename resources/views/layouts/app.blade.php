@@ -4,66 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Minerva 360' }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (Para los menús) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font (Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- TU CSS del Login (para las variables) -->
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+
+    <!-- NUEVO CSS para el Dashboard -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
     @livewireStyles
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-bold text-gray-800">Minerva 360°</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
-                    <a href="{{route('proyectos.index')}}" class="text-gray-700 hover:text-gray-900">Proyectos</a>
-                    <a href="{{ route('donantes.index') }}" class="text-gray-700 hover:text-gray-900">Donantes</a>
-                    <a href="{{ route('donaciones.index') }}" class="text-gray-700 hover:text-gray-900">Donaciones</a>
+<body>
 
-                    <div x-data="{ open: false }" class="relative">
-                        <button
-                            @click="open = !open"
-                            class="flex items-center space-x-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-                        >
-                            <span class="text-gray-800 font-semibold">{{ auth()->user()->name }}</span>
-                            <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <!-- Contenido del Dropdown -->
-                        <div
-                            x-show="open"
-                            @click.away="open = false"
-                            x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
-                        >
-                            <a href="{{ route('users.index') }}"
-                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                👤 Usuarios
-                            </a>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button
-                                    type="submit"
-                                    class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
-                                >
-                                    🔴 Cerrar sesión
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <!-- 1. Sidebar (Menú Lateral) -->
+    <div class="sidebar">
+        <!-- Logo -->
+        <a href="{{ route('dashboard') }}" class="sidebar-brand">
+            <img src="{{ asset('img/Letralogo.svg') }}" alt="Minerva Logo" width="35" height="35">
+            <span>Minerva 360</span>
+        </a>
+
+        <!-- Enlaces de Navegación -->
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <!-- La clase 'active' usa el Rojo Minerva -->
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                    <i class="bi bi-grid-fill me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}" href="{{ route('proyectos.index') }}">
+                    <i class="bi bi-briefcase-fill me-2"></i> Proyectos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('donantes.*') ? 'active' : '' }}" href="{{ route('donantes.index') }}">
+                    <i class="bi bi-heart-fill me-2"></i> Donantes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('donaciones.*') ? 'active' : '' }}" href="{{ route('donaciones.index') }}">
+                    <i class="bi bi-cash-stack me-2"></i> Donaciones
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                    <i class="bi bi-people-fill me-2"></i> Usuarios
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 2. Contenido Principal (Incluye Top-Bar) -->
+    <div class="main-content">
+        <!-- Top-Bar (Barra Superior) -->
+        <nav class="topbar">
+            <!-- Botón para ocultar/mostrar sidebar en móviles (opcional) -->
+            <button class="btn btn-link d-md-none" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <!-- Espaciador -->
+            <div class="ms-auto"></div>
+
+            <!-- Menú del Usuario (Dropdown) -->
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle me-1"></i>
+                    {{ auth()->user()->name }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                    <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <!-- Formulario de Logout -->
+                        <form action="{{ route('logout') }}" method="POST" class="w-100">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
-        </div>
-    </nav>
-    <main class="p-6">
-        @yield('content')
-    </main>
+        </nav>
+
+        <!-- Área de Contenido de la Página -->
+        <main class="content-area">
+            @yield('content')
+        </main>
+    </div>
+
+
+    <!-- Bootstrap JS (Bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/hamburguesa.js') }}"></script>
+
     @livewireScripts
     @stack('scripts')
 </body>

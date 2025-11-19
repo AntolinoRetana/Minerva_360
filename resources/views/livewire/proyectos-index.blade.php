@@ -1,50 +1,91 @@
-
 <div>
-    <div class="mb-4">
-        <a href="{{ route('proyectos.crear') }}"
-           class="px-4 py-2 bg-green-600 text-white rounded">
-            Crear Proyecto
-        </a>
+    <!-- Opcional: Añade un buscador que funcione con Livewire -->
+    <div class="mb-3">
+        <input 
+            wire:model.live="search" 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar proyectos por nombre..."
+        >
     </div>
 
-    <table class="table-auto w-full mt-4 bg-white shadow rounded">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="px-4 py-2 text-left">Nombre</th>
-                <th class="px-4 py-2 text-left">Carrera</th>
-                <th class="px-4 py-2 text-left">Meta</th>
-                <th class="px-4 py-2 text-left">Estado</th>
-                <th class="px-4 py-2 text-left">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($proyectos as $p)
+    <!-- Contenedor de la tabla para hacerla responsive -->
+    <div class="table-responsive">
+        
+        <!-- 1. Clases de Bootstrap para la tabla -->
+        <table class="table table-hover align-middle">
+            
+            <!-- 2. Cabecera de tabla estilizada -->
+            <thead class="table-light">
                 <tr>
-                    <td class="border px-4 py-2">{{ $p->nombre }}</td>
-                    <td class="border px-4 py-2">{{ $p->carrera }}</td>
-                    <td class="border px-4 py-2">${{ $p->meta }}</td>
-                    <td class="border px-4 py-2">{{ $p->estado }}</td>
-                    <td class="border px-4 py-2 space-x-2">
-                        <a href="{{ route('proyectos.editar', $p->id) }}" class="text-blue-500">Editar</a>
-
-                        <button onclick="confirmarEliminacion({{ $p->id }})" class="text-red-600">
-                            Eliminar
-                        </button>
-                        <!-- Agregar imágenes -->
-                        <a href="{{ route('imagenes-proyecto.create', ['proyecto_id' => $p->id]) }}"
-                        class="text-indigo-600">
-                            add img
-                        </a>
-                    </td>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Carrera</th>
+                    <th scope="col">Meta</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="text-center text-gray-500 py-4">
-                        No hay proyectos registrados.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            
+            <tbody>
+                @forelse ($proyectos as $proyecto)
+                    <tr>
+                        <td>{{ $proyecto->nombre }}</td>
+                        <td>{{ $proyecto->carrera }}</td>
+                        <td>${{ number_format($proyecto->meta, 2) }}</td>
+                        
+                        <!-- 3. "Badge" (Etiqueta) para el estado -->
+                        <td>
+                            @if ($proyecto->estado == 'Activo')
+                                <span class="badge bg-success">Activo</span>
+                            @elseif ($proyecto->estado == 'Completado')
+                                <span class="badge bg-primary-light text-primary">Completado</span>
+                            @else
+                                <span class="badge bg-secondary">{{ $proyecto->estado }}</span>
+                            @endif
+                        </td>
+                        
+                        <td>
+                            <!-- 4. Botones estilizados -->
+                            <button 
+                                class="btn btn-sm btn-outline-secondary"
+                                wire:click="editarProyecto({{ $proyecto->id }})"
+                            >
+                                <i class="bi bi-pencil-fill"></i> Editar
+                            </button>
+                            
+                            <!-- 5. Botón de eliminar (llama a nuestra función JS) -->
+                            <button 
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="confirmarEliminacion({{ $proyecto->id }})"
+                            >
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </button>
+                           
+                            <button 
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="window.location='{{ route('imagenes-proyecto.create', ['proyecto_id' => $proyecto->id]) }}'"
+                            >
+                                <i class="bi bi-image-fill"></i> Añadir imagen
+                            </button>
 
+
+                            <button 
+                                class="btn btn-sm btn-outline-info"
+                                onclick="window.location='{{ route('imagenes-proyecto.por-proyecto', $proyecto->id) }}'"
+                            >
+                                <i class="bi bi-images"></i> Ver imágenes
+                            </button>
+
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            No se encontraron proyectos.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>

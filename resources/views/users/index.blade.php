@@ -1,105 +1,108 @@
 @extends('layouts.app')
+@php($title = 'Gestión de Usuarios')
 
 @section('content')
-<div class="max-w-7xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Gestión de Usuarios</h2>
-            <a href="{{ route('users.create') }}"
-               class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium">
-                ➕ Nuevo Usuario
-            </a>
-        </div>
+<div class="container-fluid">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4 p-md-5">
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                {{ session('success') }}
+            <!-- Encabezado -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold h2-institucional mb-1">Gestión de Usuarios</h2>
+                    <p class="text-muted small mb-0">Administra los usuarios del sistema</p>
+                </div>
+                <a href="{{ route('users.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Nuevo Usuario
+                </a>
             </div>
-        @endif
 
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                {{ session('error') }}
-            </div>
-        @endif
+            <!-- Alertas -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            ID
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Nombre
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Email
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Fecha de Registro
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($users as $user)
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $user->id }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">
-                                    {{ $user->name }}
-                                    @if($user->id === auth()->id())
-                                        <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Tú
-                                        </span>
+                            <th scope="col" class="text-muted fw-semibold">ID</th>
+                            <th scope="col" class="text-muted fw-semibold">Nombre</th>
+                            <th scope="col" class="text-muted fw-semibold">Email</th>
+                            <th scope="col" class="text-muted fw-semibold">Fecha de Registro</th>
+                            <th scope="col" class="text-muted fw-semibold text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($users as $user)
+                            <tr>
+                                <td class="fw-medium">{{ $user->id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-circle fs-4 me-2 text-muted"></i>
+                                        <div>
+                                            <span class="fw-semibold">{{ $user->name }}</span>
+                                            @if($user->id === auth()->id())
+                                                <span class="badge bg-primary ms-2">Tú</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-muted">{{ $user->email }}</td>
+                                <td class="text-muted">{{ $user->created_at->format('d/m/Y') }}</td>
+                                <td class="text-end">
+                                    <a href="{{ route('users.edit', $user) }}"
+                                       class="btn btn-sm btn-outline-primary me-2"
+                                       data-bs-toggle="tooltip"
+                                       title="Editar usuario">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    @if($user->id !== auth()->id())
+                                        <button
+                                            onclick="confirmarEliminacion({{ $user->id }})"
+                                            class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="tooltip"
+                                            title="Eliminar usuario">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                        <form id="delete-form-{{ $user->id }}"
+                                              action="{{ route('users.destroy', $user) }}"
+                                              method="POST"
+                                              class="d-none">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     @endif
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->email }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->created_at->format('d/m/Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('users.edit', $user) }}"
-                                   class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                    ✏️ Editar
-                                </a>
-                                @if($user->id !== auth()->id())
-                                    <button
-                                        onclick="confirmarEliminacion({{ $user->id }})"
-                                        class="text-red-600 hover:text-red-900">
-                                        🗑️ Eliminar
-                                    </button>
-                                    <form id="delete-form-{{ $user->id }}"
-                                          action="{{ route('users.destroy', $user) }}"
-                                          method="POST"
-                                          class="hidden">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                No hay usuarios registrados
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    <p class="mb-0">No hay usuarios registrados</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="mt-4">
-            {{ $users->links() }}
+            <!-- Paginación -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $users->links() }}
+            </div>
+
         </div>
     </div>
 </div>
@@ -112,8 +115,13 @@ function confirmarEliminacion(userId) {
         text: "Esta acción no se puede revertir",
         icon: 'warning',
         showCancelButton: true,
+<<<<<<< HEAD
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
+=======
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+>>>>>>> origin/Desarrollo
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     }).then((result) => {
@@ -122,6 +130,17 @@ function confirmarEliminacion(userId) {
         }
     });
 }
+<<<<<<< HEAD
+=======
+
+// Inicializar tooltips de Bootstrap
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+>>>>>>> origin/Desarrollo
 </script>
 @endpush
 @endsection
