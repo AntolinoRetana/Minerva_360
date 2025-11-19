@@ -28,4 +28,9 @@ class ProyectosIndex extends Component
 
         return view('livewire.proyectos-index', compact('proyectos'));
     }
+
+    public function editarProyecto($id)
+    {
+        return redirect()->route('proyectos.editar', $id);
+    }
 }
