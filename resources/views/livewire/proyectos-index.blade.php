@@ -60,6 +60,22 @@
                             >
                                 <i class="bi bi-trash-fill"></i> Eliminar
                             </button>
+                           
+                            <button 
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="window.location='{{ route('imagenes-proyecto.create', ['proyecto_id' => $proyecto->id]) }}'"
+                            >
+                                <i class="bi bi-image-fill"></i> Añadir imagen
+                            </button>
+
+
+                            <button 
+                                class="btn btn-sm btn-outline-info"
+                                onclick="window.location='{{ route('imagenes-proyecto.por-proyecto', $proyecto->id) }}'"
+                            >
+                                <i class="bi bi-images"></i> Ver imágenes
+                            </button>
+
                         </td>
                     </tr>
                 @empty

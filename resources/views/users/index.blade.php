@@ -115,8 +115,13 @@ function confirmarEliminacion(userId) {
         text: "Esta acción no se puede revertir",
         icon: 'warning',
         showCancelButton: true,
+<<<<<<< HEAD
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+=======
         confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
+>>>>>>> origin/Desarrollo
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     }).then((result) => {
@@ -125,6 +130,8 @@ function confirmarEliminacion(userId) {
         }
     });
 }
+<<<<<<< HEAD
+=======
 
 // Inicializar tooltips de Bootstrap
 document.addEventListener('DOMContentLoaded', function () {
@@ -133,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });
+>>>>>>> origin/Desarrollo
 </script>
 @endpush
 @endsection

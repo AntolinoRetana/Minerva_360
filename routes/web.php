@@ -9,6 +9,7 @@ use App\Models\Proyecto;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonanteController;
 use App\Http\Controllers\DonacionController;
+use App\Http\Controllers\ImagenesProyectoController;
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
@@ -47,6 +48,26 @@ Route::middleware('auth')->group(function () {
 
     // Rutas de Usuarios (CRUD completo)
     Route::resource('users', UserController::class);
+
+       // Ver galería
+    Route::get('/proyectos/{id}/imagenes', 
+        [ImagenesProyectoController::class, 'porProyecto']
+    )->name('imagenes-proyecto.por-proyecto');
+
+    // Subir imagen
+    Route::get('/imagenes-proyecto/create',
+        [ImagenesProyectoController::class, 'create']
+    )->name('imagenes-proyecto.create');
+
+    Route::post('/imagenes-proyecto/store',
+        [ImagenesProyectoController::class, 'store']
+    )->name('imagenes-proyecto.store');
+
+    // Eliminar imagen
+    Route::delete('/imagenes-proyecto/{id}/eliminar',
+        [ImagenesProyectoController::class, 'eliminarImagen']
+    )->name('imagenes-proyecto.eliminar');
+
 });
 
 // Redirigir raíz según autenticación

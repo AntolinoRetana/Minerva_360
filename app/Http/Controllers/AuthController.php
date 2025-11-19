@@ -10,7 +10,6 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-
     // Mostrar formulario de login
     public function showLogin()
     {
