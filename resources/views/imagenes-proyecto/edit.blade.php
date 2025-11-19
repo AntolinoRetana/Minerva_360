@@ -1,29 +1,33 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ __('Update') }} Imagenes Proyecto
+    Edit Imagenes Proyecto
 @endsection
 
 @section('content')
-    <section class="content container-fluid">
-        <div class="">
-            <div class="col-md-12">
+<section class="content container-fluid">
+    <div>
+        <div class="col-md-12">
 
-                <div class="card card-default">
-                    <div class="card-header">
-                        <span class="card-title">{{ __('Update') }} Imagenes Proyecto</span>
-                    </div>
-                    <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('imagenes-proyectos.update', $imagenesProyecto->id) }}"  role="form" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
-                            @csrf
+            <div class="card card-default">
+                <div class="card-header">
+                    <span class="card-title">Edit Imagenes Proyecto</span>
+                </div>
 
-                            @include('imagenes-proyecto.form')
+                <div class="card-body bg-white">
 
-                        </form>
-                    </div>
+                    <form method="POST" action="{{ route('imagenes-proyecto.update', $imagenesProyecto->id) }}">
+                        @csrf
+                        @method('PATCH')
+
+                        @include('imagenes-proyecto.form')
+
+                    </form>
+
                 </div>
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 @endsection

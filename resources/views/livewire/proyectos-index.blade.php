@@ -30,6 +30,11 @@
                         <button onclick="confirmarEliminacion({{ $p->id }})" class="text-red-600">
                             Eliminar
                         </button>
+                        <!-- Agregar imágenes -->
+                        <a href="{{ route('imagenes-proyecto.create', ['proyecto_id' => $p->id]) }}"
+                        class="text-indigo-600">
+                            add img
+                        </a>
                     </td>
                 </tr>
             @empty

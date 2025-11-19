@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
 
     //crud completo de imagenes proyectos
-    Route::resource('imagenes-proyectos', ImagenesProyectoController::class);
+    Route::resource('imagenes-proyecto', App\Http\Controllers\ImagenesProyectoController::class);
 });
 
 // Redirigir raíz según autenticación
