@@ -1,91 +1,102 @@
 <div>
-    <!-- Opcional: Añade un buscador que funcione con Livewire -->
-    <div class="mb-3">
-        <input 
-            wire:model.live="search" 
-            type="text" 
-            class="form-control" 
-            placeholder="Buscar proyectos por nombre..."
-        >
+    <!-- Barra de Herramientas: Buscador -->
+    <div class="mb-4">
+        <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+                <i class="bi bi-search"></i>
+            </span>
+            <input 
+                wire:model.live="search" 
+                type="text" 
+                class="form-control border-start-0 ps-0" 
+                placeholder="Buscar proyectos por nombre, carrera o ubicación..."
+                aria-label="Buscar proyectos">
+        </div>
     </div>
 
-    <!-- Contenedor de la tabla para hacerla responsive -->
+    <!-- Contenedor de la tabla -->
     <div class="table-responsive">
-        
-        <!-- 1. Clases de Bootstrap para la tabla -->
         <table class="table table-hover align-middle">
-            
-            <!-- 2. Cabecera de tabla estilizada -->
             <thead class="table-light">
                 <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Carrera</th>
-                    <th scope="col">Meta</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" class="py-3">Nombre</th>
+                    <th scope="col" class="py-3">Carrera</th>
+                    <th scope="col" class="py-3">Meta</th>
+                    <th scope="col" class="py-3">Estado</th>
+                    <th scope="col" class="py-3 text-end">Acciones</th>
                 </tr>
             </thead>
-            
             <tbody>
                 @forelse ($proyectos as $proyecto)
                     <tr>
-                        <td>{{ $proyecto->nombre }}</td>
-                        <td>{{ $proyecto->carrera }}</td>
-                        <td>${{ number_format($proyecto->meta, 2) }}</td>
+                        <td class="fw-medium">{{ $proyecto->nombre }}</td>
+                        <td class="text-muted">{{ $proyecto->carrera }}</td>
+                        <td class="fw-bold text-success">${{ number_format($proyecto->meta, 2) }}</td>
                         
-                        <!-- 3. "Badge" (Etiqueta) para el estado -->
+                        <!-- Badge de Estado -->
                         <td>
                             @if ($proyecto->estado == 'Activo')
-                                <span class="badge bg-success">Activo</span>
+                                <span class="badge bg-success-light text-success">Activo</span>
                             @elseif ($proyecto->estado == 'Completado')
                                 <span class="badge bg-primary-light text-primary">Completado</span>
+                            @elseif ($proyecto->estado == 'Cancelado')
+                                <span class="badge bg-danger-light text-danger">Cancelado</span>
                             @else
-                                <span class="badge bg-secondary">{{ $proyecto->estado }}</span>
+                                <span class="badge bg-secondary-light text-secondary">{{ $proyecto->estado }}</span>
                             @endif
                         </td>
                         
-                        <td>
-                            <!-- 4. Botones estilizados -->
-                            <button 
-                                class="btn btn-sm btn-outline-secondary"
-                                wire:click="editarProyecto({{ $proyecto->id }})"
-                            >
-                                <i class="bi bi-pencil-fill"></i> Editar
-                            </button>
-                            
-                            <!-- 5. Botón de eliminar (llama a nuestra función JS) -->
-                            <button 
-                                class="btn btn-sm btn-outline-danger"
-                                onclick="confirmarEliminacion({{ $proyecto->id }})"
-                            >
-                                <i class="bi bi-trash-fill"></i> Eliminar
-                            </button>
-                           
-                            <button 
-                                class="btn btn-sm btn-outline-primary"
-                                onclick="window.location='{{ route('imagenes-proyecto.create', ['proyecto_id' => $proyecto->id]) }}'"
-                            >
-                                <i class="bi bi-image-fill"></i> Añadir imagen
-                            </button>
+                        <!-- Botones de Acción -->
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <!-- Botón Editar -->
+                                <a href="{{ route('proyectos.editar', $proyecto->id) }}" 
+                                   class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-fill"></i> 
+                                    <span class="d-none d-md-inline">Editar</span>
+                                </a>
+                                
+                                <!-- Botón Eliminar -->
+                                <button 
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                                    onclick="confirmarEliminacion({{ $proyecto->id }})"
+                                    title="Eliminar">
+                                    <i class="bi bi-trash-fill"></i> 
+                                    <span class="d-none d-md-inline">Eliminar</span>
+                                </button>
 
+                                <!-- Botón Ver Imágenes (Color Info) -->
+                                <a href="{{ route('imagenes-proyecto.por-proyecto', $proyecto->id) }}"
+                                   class="btn btn-sm btn-outline-info d-flex align-items-center gap-1"
+                                   title="Galería">
+                                    <i class="bi bi-images"></i> 
+                                    <span class="d-none d-md-inline">Imágenes</span>
+                                </a>
 
-                            <button 
-                                class="btn btn-sm btn-outline-info"
-                                onclick="window.location='{{ route('imagenes-proyecto.por-proyecto', $proyecto->id) }}'"
-                            >
-                                <i class="bi bi-images"></i> Ver imágenes
-                            </button>
-
+                                <!-- Botón Añadir Imagen (Color Primario/Marca) -->
+                                <a href="{{ route('imagenes-proyecto.create', ['proyecto_id' => $proyecto->id]) }}"
+                                   class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                                   title="Subir Imagen">
+                                    <i class="bi bi-cloud-upload-fill"></i> 
+                                    <span class="d-none d-md-inline">Subir</span>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
-                            No se encontraron proyectos.
+                        <td colspan="5" class="text-center py-5">
+                            <div class="text-muted">
+                                <i class="bi bi-search fs-1 d-block mb-2"></i>
+                                No se encontraron proyectos que coincidan con tu búsqueda.
+                            </div>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
 </div>
