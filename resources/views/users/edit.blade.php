@@ -24,17 +24,22 @@
                             <label for="name" class="form-label label-t fw-semibold">
                                 Nombre completo <span class="text-danger">*</span>
                             </label>
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                required
-                                value="{{ old('name', $user->name) }}"
-                                class="form-control @error('name') is-invalid @enderror"
-                                placeholder="Ingrese el nombre completo">
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    required
+                                    value="{{ old('name', $user->name) }}"
+                                    class="form-control border-start-0 ps-0 @error('name') is-invalid @enderror"
+                                    placeholder="Ingrese el nombre completo">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Email -->
@@ -42,30 +47,35 @@
                             <label for="email" class="form-label label-t fw-semibold">
                                 Correo electrónico <span class="text-danger">*</span>
                             </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                required
-                                value="{{ old('email', $user->email) }}"
-                                class="form-control @error('email') is-invalid @enderror"
-                                placeholder="correo@ejemplo.com">
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    required
+                                    value="{{ old('email', $user->email) }}"
+                                    class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror"
+                                    placeholder="correo@ejemplo.com">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Separador -->
-                        <hr class="my-4">
+                        <hr class="my-4 text-muted opacity-25">
 
                         <!-- Sección de Cambio de Contraseña -->
                         <div class="mb-4">
-                            <h5 class="fw-bold mb-3">
-                                <i class="bi bi-key me-2"></i>Cambiar contraseña (opcional)
+                            <h5 class="fw-bold mb-3 text-brand-text">
+                                <i class="bi bi-shield-lock me-2"></i>Cambiar contraseña (opcional)
                             </h5>
-                            <div class="alert alert-info d-flex align-items-center" role="alert">
-                                <i class="bi bi-info-circle-fill me-2"></i>
-                                <small>Deje estos campos en blanco si no desea cambiar la contraseña</small>
+                            <div class="alert alert-info d-flex align-items-center border-0 bg-info-subtle text-info-emphasis" role="alert">
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                <small>Deje estos campos en blanco si no desea cambiar la contraseña actual.</small>
                             </div>
 
                             <!-- Nueva Contraseña -->
@@ -73,18 +83,23 @@
                                 <label for="password" class="form-label label-t fw-semibold">
                                     Nueva contraseña
                                 </label>
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    placeholder="Mínimo 8 caracteres">
-                                <small class="form-text text-muted">
-                                    <i class="bi bi-info-circle me-1"></i>Mínimo 8 caracteres
-                                </small>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted">
+                                        <i class="bi bi-key"></i>
+                                    </span>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        class="form-control border-start-0 ps-0 @error('password') is-invalid @enderror"
+                                        placeholder="Mínimo 8 caracteres">
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-text text-muted small">
+                                    Mínimo 8 caracteres.
+                                </div>
                             </div>
 
                             <!-- Confirmar Nueva Contraseña -->
@@ -92,21 +107,26 @@
                                 <label for="password_confirmation" class="form-label label-t fw-semibold">
                                     Confirmar nueva contraseña
                                 </label>
-                                <input
-                                    id="password_confirmation"
-                                    name="password_confirmation"
-                                    type="password"
-                                    class="form-control"
-                                    placeholder="Repita la nueva contraseña">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted">
+                                        <i class="bi bi-check-circle"></i>
+                                    </span>
+                                    <input
+                                        id="password_confirmation"
+                                        name="password_confirmation"
+                                        type="password"
+                                        class="form-control border-start-0 ps-0"
+                                        placeholder="Repita la nueva contraseña">
+                                </div>
                             </div>
                         </div>
 
                         <!-- Botones -->
-                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
                             <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-2"></i>Cancelar
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary px-4">
                                 <i class="bi bi-save me-2"></i>Actualizar Usuario
                             </button>
                         </div>
