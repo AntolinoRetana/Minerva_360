@@ -12,6 +12,7 @@ class UserController extends Controller
     // Mostrar listado de usuarios
     public function index()
     {
+        // Paginamos de 10 en 10 y ordenamos por los más recientes
         $users = User::latest()->paginate(10);
         return view('users.index', compact('users'));
     }
@@ -25,18 +26,19 @@ class UserController extends Controller
     // Guardar nuevo usuario
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)], // Mínimo 8 caracteres
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
+        // Usamos 'success' para que SweetAlert lo detecte
         return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente.');
     }
 
@@ -49,25 +51,25 @@ class UserController extends Controller
     // Actualizar usuario
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            // Ignoramos el email del usuario actual para que no dé error de "ya existe"
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'confirmed', Password::min(8)],
         ]);
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-        ];
+        // Actualizamos nombre y email
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
 
-        // Solo actualizar la contraseña si se proporciona
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        // Solo actualizamos la contraseña si el campo NO está vacío
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
         }
 
-        $user->update($data);
+        $user->save();
 
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente.');
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
     // Eliminar usuario

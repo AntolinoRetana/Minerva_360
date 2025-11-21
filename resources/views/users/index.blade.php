@@ -28,9 +28,9 @@
                     <thead class="table-light">
                         <tr>
                             <th scope="col" class="py-3 ps-4">Nombre</th>
-                            <th scope="col" class="py-3">Email</th>
-                            <th scope="col" class="py-3">Fecha de Registro</th>
-                            <th scope="col" class="py-3 text-end pe-4">Acciones</th>
+                            <th scope="col" class="py-3 text-center">Email</th>
+                            <th scope="col" class="py-3 text-center">Fecha de Registro</th>
+                            <th scope="col" class="py-3 text-center pe-4" style="min-width: 250px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,9 +38,9 @@
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
-                                        <!-- Avatar Circular con Iniciales -->
+                                        <!-- Avatar Circular -->
                                         <div class="avatar-circle me-3 bg-primary-light text-primary fw-bold d-flex align-items-center justify-content-center" 
-                                             style="width: 40px; height: 40px; rounded-circle; border-radius: 50%;">
+                                             style="width: 40px; height: 40px; border-radius: 50%;">
                                             {{ substr($user->name, 0, 1) }}
                                         </div>
                                         <div>
@@ -55,31 +55,33 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a href="mailto:{{ $user->email }}" class="text-decoration-none text-secondary">
                                         {{ $user->email }}
                                     </a>
                                 </td>
-                                <td class="text-muted">
+                                <td class="text-center text-muted">
                                     {{ $user->created_at->format('d/m/Y') }}
                                 </td>
-                                <td class="text-end pe-4">
-                                    <div class="d-flex justify-content-end gap-2">
-                                        <!-- Botón Editar -->
+                                <td class="text-center pe-4">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        
+                                        <!-- Botón Editar (Estilo Contorno Gris) -->
                                         <a href="{{ route('users.edit', $user) }}" 
-                                           class="btn btn-sm btn-outline-secondary" 
-                                           data-bs-toggle="tooltip" 
+                                           class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 fw-medium px-3" 
                                            title="Editar usuario">
                                             <i class="bi bi-pencil-fill"></i>
+                                            <span>Editar</span>
                                         </a>
 
                                         @if($user->id !== auth()->id())
-                                            <!-- Botón Eliminar -->
+                                            <!-- Botón Eliminar (Estilo Contorno Rojo) -->
                                             <button type="button"
                                                     onclick="confirmarEliminacionUsuario({{ $user->id }})"
-                                                    class="btn btn-sm btn-outline-danger"
+                                                    class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1 fw-medium px-3"
                                                     title="Eliminar usuario">
                                                 <i class="bi bi-trash-fill"></i>
+                                                <span>Eliminar</span>
                                             </button>
 
                                             <!-- Formulario Oculto -->
@@ -90,11 +92,18 @@
                                                 @method('DELETE')
                                             </form>
                                         @else
-                                            <!-- Espacio vacío para alinear si es el usuario actual -->
-                                            <button class="btn btn-sm btn-outline-light disabled border-0" aria-disabled="true">
-                                                <i class="bi bi-trash-fill text-white"></i>
-                                            </button>
+                                            <!-- Botón Eliminar (DESHABILITADO - Estilo Sutil) -->
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="No puedes eliminar tu propio usuario">
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-secondary disabled opacity-25 d-flex align-items-center gap-1 fw-medium px-3" 
+                                                        style="pointer-events: none;"
+                                                        disabled>
+                                                    <i class="bi bi-trash-fill"></i>
+                                                    <span>Eliminar</span>
+                                                </button>
+                                            </span>
                                         @endif
+
                                     </div>
                                 </td>
                             </tr>
@@ -102,7 +111,7 @@
                             <tr>
                                 <td colspan="4" class="text-center py-5 text-muted">
                                     <i class="bi bi-people fs-1 d-block mb-3 opacity-50"></i>
-                                    <p class="mb-0">No hay usuarios registrados en el sistema.</p>
+                                    <p class="mb-0">No hay usuarios registrados.</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -133,7 +142,6 @@
     });
 
     function confirmarEliminacionUsuario(userId) {
-        // Estilos de marca
         const style = getComputedStyle(document.body);
         const rojoMinerva = style.getPropertyValue('--rojo-minerva').trim();
 
