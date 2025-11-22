@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Livewire\Proyectos;
 use App\Livewire\Proyectos\CrearProyecto;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonanteController;
 use App\Http\Controllers\DonacionController;
 use App\Http\Controllers\ImagenesProyectoController;
+use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\ProfileController;
 
 // Rutas públicas
 Route::middleware('guest')->group(function () {
@@ -18,12 +21,26 @@ Route::middleware('guest')->group(function () {
 });
 
 // Rutas protegidas
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('users', UserController::class);
+
+    Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
+    
+    // Editar Perfil (Formulario)
+    Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+    
+    // Acciones de actualización
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/perfil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    });
+    
 
     // Rutas de Proyectos
     Route::get('/proyectos', function () {
@@ -68,9 +85,13 @@ Route::middleware('auth')->group(function () {
         [ImagenesProyectoController::class, 'eliminarImagen']
     )->name('imagenes-proyecto.eliminar');
 
-});
+
 
 // Redirigir raíz según autenticación
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
+
+Route::get('/reportes/donaciones/csv', [ReporteController::class, 'exportarDonacionesCsv'])->name('reportes.donaciones.csv');
+
+Route::get('/reportes/donaciones/print', [ReporteController::class, 'reporteDonacionesPrint'])->name('reportes.donaciones.print');

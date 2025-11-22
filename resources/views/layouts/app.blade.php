@@ -84,7 +84,7 @@
                     {{ auth()->user()->name }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
-                    <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Mi Perfil</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <!-- Formulario de Logout -->
@@ -110,6 +110,7 @@
     <!-- Bootstrap JS (Bundle) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/hamburguesa.js') }}"></script>
 
     @livewireScripts

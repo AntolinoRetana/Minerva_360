@@ -25,4 +25,6 @@ class Donante extends Authenticatable
     {
         return $this->hasMany(Donacion::class, 'donante_id');
     }
+
+
 }
