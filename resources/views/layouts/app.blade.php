@@ -16,11 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- TU CSS del Login (para las variables) -->
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-
-    <!-- NUEVO CSS para el Dashboard -->
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
 </head>
