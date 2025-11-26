@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="guardar">
+    <form wire:submit.prevent="actualizar">
         
         <!-- Fila 1: Nombre (Ancho Completo) -->
         <div class="row mb-3">
@@ -70,8 +70,6 @@
                 <select id="estado" wire:model="estado" class="form-select @error('estado') is-invalid @enderror">
                     <option value="Activo">Activo</option>
                     <option value="Completado">Completado</option>
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Cancelado">Cancelado</option>
                 </select>
                 @error('estado') 
                     <div class="invalid-feedback">{{ $message }}</div> 

@@ -22,6 +22,7 @@
                     <th scope="col" class="py-3">Nombre</th>
                     <th scope="col" class="py-3">Carrera</th>
                     <th scope="col" class="py-3">Meta</th>
+                    <th scope="col" class="py-3">Donado</th>
                     <th scope="col" class="py-3">Estado</th>
                     <th scope="col" class="py-3 text-end">Acciones</th>
                 </tr>
@@ -32,7 +33,11 @@
                         <td class="fw-medium">{{ $proyecto->nombre }}</td>
                         <td class="text-muted">{{ $proyecto->carrera }}</td>
                         <td class="fw-bold text-success">${{ number_format($proyecto->meta, 2) }}</td>
-                        
+                       <td class="fw-bold 
+                            {{ ($proyecto->total_donado ?? 0) >= $proyecto->meta ? 'text-success' : 'text-primary' }}">
+                            
+                            ${{ number_format($proyecto->total_donado ?? 0, 2) }}
+                        </td>
                         <!-- Badge de Estado -->
                         <td>
                             @if ($proyecto->estado == 'Activo')

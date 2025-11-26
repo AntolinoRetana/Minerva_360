@@ -7,6 +7,7 @@ use App\Models\Proyecto;
 
 class ProyectosIndex extends Component
 {
+    public $search = '';
     protected $listeners = ['eliminarProyecto'];
 
     public function eliminarProyecto($id)
@@ -24,7 +25,15 @@ class ProyectosIndex extends Component
 
     public function render()
     {
-        $proyectos = Proyecto::orderBy('id', 'asc')->get();
+        $proyectos = Proyecto::query()
+            ->withSum('donaciones as total_donado', 'monto')
+            ->when($this->search, function ($query) {
+                $query->where('nombre', 'like', '%' . $this->search . '%')
+                    ->orWhere('carrera', 'like', '%' . $this->search . '%')
+                    ->orWhere('ubicacion', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy('id', 'asc')
+            ->get();
 
         return view('livewire.proyectos-index', compact('proyectos'));
     }
