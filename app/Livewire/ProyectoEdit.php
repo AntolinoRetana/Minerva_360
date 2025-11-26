@@ -29,10 +29,10 @@ class ProyectoEdit extends Component
     public function actualizar()
     {
         $this->validate([
-            'nombre'   => 'required|string|max:255',
-            'meta'     => 'required|numeric|min:0',
-            'progreso' => 'nullable|numeric|min:0',
-            'estado'   => 'required|in:Activo,Completado',
+            'nombre'    => 'required|string|max:255',
+            'meta'      => 'required|numeric|min:0',
+            'progreso'  => 'nullable|numeric|min:0',
+            'estado'    => 'required|in:Activo,Completado',
         ]);
 
         $proyecto = Proyecto::findOrFail($this->proyectoId);
@@ -47,9 +47,10 @@ class ProyectoEdit extends Component
             'estado'      => $this->estado,
         ]);
 
-        session()->flash('success', 'Proyecto actualizado');
+        session()->flash('success', 'Proyecto actualizado correctamente.');
         return redirect()->route('proyectos.index');
     }
+
 
     public function render()
     {
