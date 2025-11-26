@@ -24,23 +24,23 @@ Route::middleware('guest')->group(function () {
     Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // En routes/web.php, dentro del grupo de rutas protegidas (middleware auth)
+    Route::get('/dashboard/actualizar', [DashboardController::class, 'getDatosActualizados'])
+    ->name('dashboard.actualizar');
 
     Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
 
     Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
-    
+
     // Editar Perfil (Formulario)
     Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
-    
+
     // Acciones de actualización
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/perfil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     });
-    
+
 
     // Rutas de Proyectos
     Route::get('/proyectos', function () {
@@ -67,7 +67,7 @@ Route::middleware('guest')->group(function () {
     Route::resource('users', UserController::class);
 
        // Ver galería
-    Route::get('/proyectos/{id}/imagenes', 
+    Route::get('/proyectos/{id}/imagenes',
         [ImagenesProyectoController::class, 'porProyecto']
     )->name('imagenes-proyecto.por-proyecto');
 
